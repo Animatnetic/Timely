@@ -6,5 +6,7 @@ E.g: There are the same buttons formed at the left side of the screen to navigat
 
 You can fork this project to inspect this code if you want to learn something. You could also just download if it if you wanted to, but your OS has a better clock app that is probably already pre-isntalled.
 
-## Technologies:
+## Packages used:
 1. TTK Bootstrap (A fork of tkinter with prettier GuI)
+2. datetime
+3. playsound
