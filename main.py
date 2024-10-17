@@ -19,7 +19,6 @@ from playsound import playsound
 import os
 import sys
 
-
 # https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
 # Followed resource_path function has been derived from above stack overflow thread as to help make the py file into one file
 def resource_path(relative_path):
@@ -125,7 +124,7 @@ class TimerFrame(ttb.Frame):
         self.timer_meter.configure(amountused=self.totalling_time, bootstyle=WARNING)
 
         play_alarm_sound()
-        self.alarm_afterfunc_id = self.selector.after(1000, self.alarm)
+        self.alarm_afterfunc_id = self.after(1000, self.alarm)
 
     def allow_update_timer(self, activated):
         if not activated:
@@ -134,7 +133,7 @@ class TimerFrame(ttb.Frame):
             self.alarm()
 
     def pause_timer(self):
-        self.selector.after_cancel(self.timer_afterfunc_id)
+        self.after_cancel(self.timer_afterfunc_id)
         self.pause_button.configure(text="Continue", bootstyle=SUCCESS, command=self.update_pause)
 
     def update_pause(self):
@@ -143,7 +142,7 @@ class TimerFrame(ttb.Frame):
         self.update_timer()
 
     def cancel_timer(self):
-        self.selector.after_cancel(self.timer_afterfunc_id)
+        self.after_cancel(self.timer_afterfunc_id)
         self.activated_timer_frame.destroy()
         self.timer_entry_frame.grid(row=0, columnspan=3, padx=50)
         self.start_timer_btn.grid(row=1, column=1, padx=50, pady=50)
@@ -192,6 +191,7 @@ class TimerFrame(ttb.Frame):
                 self.timer_meter = ttb.Meter(self.activated_timer_frame, interactive=False,
                                              amountused=self.time_in_seconds, showtext=False,
                                              metersize=250, amounttotal=self.totalling_time)
+
                 self.timer_tick = ttb.Label(self.timer_meter, text=self.stringify_time,
                                             font=("Arial Greek", 20, "bold"))
 
@@ -200,7 +200,7 @@ class TimerFrame(ttb.Frame):
                 self.timer_tick.pack(side="top")
 
                 self.activated_timer_frame.grid(row=0, column=0)
-                self.selector.after(1000, self.update_timer)
+                self.after(1000, self.update_timer)
 
             except ValueError:
                 return None
