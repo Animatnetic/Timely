@@ -19,6 +19,7 @@ from playsound import playsound
 import os
 import sys
 
+
 # https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
 # Followed resource_path function has been derived from above stack overflow thread as to help make the py file into one file
 def resource_path(relative_path):
@@ -60,7 +61,7 @@ def format_time(seconds: int):
 
 
 def play_alarm_sound():
-    playsound("alarm_sound.wav", block=False)
+    playsound(resource_path("alarm_sound.wav"), block=False)
 
 
 class TimerFrame(ttb.Frame):
