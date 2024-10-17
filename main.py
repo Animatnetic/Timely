@@ -149,62 +149,47 @@ class TimerFrame(ttb.Frame):
         self.start_timer_btn.grid(row=1, column=1, padx=50, pady=50)
 
     def start_timer(self):
-        hours_entry_val = self.hours_entry.get()
-        minutes_entry_val = self.minutes_entry.get()
-        seconds_entry_val = self.seconds_entry.get()
+        try:
+            hours_entry_val = int(self.hours_entry.get())
+            minutes_entry_val = int(self.minutes_entry.get())
+            seconds_entry_val = int(self.seconds_entry.get())
 
-        if hours_entry_val == "" and minutes_entry_val == "" and seconds_entry_val == "":
-            pass
-        else:
-            try:
-                entry_values = [hours_entry_val, minutes_entry_val, seconds_entry_val]
-
-                for value_index in range(len(entry_values)):
-                    if entry_values[value_index] == "":
-                        if value_index == 0:
-                            hours_entry_val = 0
-                        elif value_index == 1:
-                            minutes_entry_val = 0
-                        elif value_index == 2:
-                            seconds_entry_val = 0
-
-                int(hours_entry_val)  # Type check
-                int(minutes_entry_val)  # Type check
-                int(seconds_entry_val)  # Type checks
-
-                self.timer_entry_frame.grid_forget()
-                self.start_timer_btn.grid_forget()
-
-                self.time_in_seconds = (int(hours_entry_val) * 3600) + (int(minutes_entry_val) * 60) + (
-                    int(seconds_entry_val))
-                self.totalling_time = self.time_in_seconds
-                self.stringify_time = format_time(self.time_in_seconds)
-
-                self.activated_timer_frame = ttb.Frame(self)
-
-                self.pause_button = ttb.Button(self.activated_timer_frame, text="Pause",
-                                               bootstyle="warning-outline", command=self.pause_timer)
-
-                self.cancel_button = ttb.Button(self.activated_timer_frame, text="Cancel",
-                                                bootstyle="danger-outline", command=self.cancel_timer)
-                self.cancel_button.grid(row=0, column=1, sticky="NW", padx=5)
-
-                self.timer_meter = ttb.Meter(self.activated_timer_frame, interactive=False,
-                                             amountused=self.time_in_seconds, showtext=False,
-                                             metersize=250, amounttotal=self.totalling_time)
-
-                self.timer_tick = ttb.Label(self.timer_meter, text=self.stringify_time,
-                                            font=("Arial Greek", 20, "bold"))
-
-                self.pause_button.grid(row=0, column=1, sticky="NE")
-                self.timer_meter.grid(row=1, column=1, padx=85)
-                self.timer_tick.pack(side="top")
-
-                self.activated_timer_frame.grid(row=0, column=0)
-                self.after(1000, self.update_timer)
-
-            except ValueError:
+            if hours_entry_val == 0 and minutes_entry_val == 0 and seconds_entry_val == 0:
                 return None
+
+            self.timer_entry_frame.grid_forget()
+            self.start_timer_btn.grid_forget()
+
+            self.time_in_seconds = (int(hours_entry_val) * 3600) + (int(minutes_entry_val) * 60) + (
+                int(seconds_entry_val))
+            self.totalling_time = self.time_in_seconds
+            self.stringify_time = format_time(self.time_in_seconds)
+
+            self.activated_timer_frame = ttb.Frame(self)
+
+            self.pause_button = ttb.Button(self.activated_timer_frame, text="Pause",
+                                           bootstyle="warning-outline", command=self.pause_timer)
+
+            self.cancel_button = ttb.Button(self.activated_timer_frame, text="Cancel",
+                                            bootstyle="danger-outline", command=self.cancel_timer)
+            self.cancel_button.grid(row=0, column=1, sticky="NW", padx=5)
+
+            self.timer_meter = ttb.Meter(self.activated_timer_frame, interactive=False,
+                                         amountused=self.time_in_seconds, showtext=False,
+                                         metersize=250, amounttotal=self.totalling_time)
+
+            self.timer_tick = ttb.Label(self.timer_meter, text=self.stringify_time,
+                                        font=("Arial Greek", 20, "bold"))
+
+            self.pause_button.grid(row=0, column=1, sticky="NE")
+            self.timer_meter.grid(row=1, column=1, padx=85)
+            self.timer_tick.pack(side="top")
+
+            self.activated_timer_frame.grid(row=0, column=0)
+            self.after(1000, self.update_timer)
+
+        except ValueError:
+            return None
 
 
 def main():
