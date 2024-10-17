@@ -150,18 +150,28 @@ class TimerFrame(ttb.Frame):
 
     def start_timer(self):
         try:
-            hours_entry_val = int(self.hours_entry.get())
-            minutes_entry_val = int(self.minutes_entry.get())
-            seconds_entry_val = int(self.seconds_entry.get())
+            hours_entry_val = self.hours_entry.get()
+            minutes_entry_val = self.minutes_entry.get()
+            seconds_entry_val = self.seconds_entry.get()
+
+            if hours_entry_val == "":
+                hours_entry_val = 0
+            if minutes_entry_val == "":
+                minutes_entry_val = 0
+            if seconds_entry_val == "":
+                seconds_entry_val = 0
 
             if hours_entry_val == 0 and minutes_entry_val == 0 and seconds_entry_val == 0:
                 return None
 
+            hours_entry_val = int(hours_entry_val)
+            minutes_entry_val = int(minutes_entry_val)
+            seconds_entry_val =  int(seconds_entry_val)
+
             self.timer_entry_frame.grid_forget()
             self.start_timer_btn.grid_forget()
 
-            self.time_in_seconds = (int(hours_entry_val) * 3600) + (int(minutes_entry_val) * 60) + (
-                int(seconds_entry_val))
+            self.time_in_seconds = (hours_entry_val * 3600) + (minutes_entry_val * 60) + seconds_entry_val
             self.totalling_time = self.time_in_seconds
             self.stringify_time = format_time(self.time_in_seconds)
 
