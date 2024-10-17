@@ -32,9 +32,10 @@ def resource_path(relative_path):
 
 
 class TimeFrame(ttb.Frame):
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, controller, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.parent = parent
+        self.controller = controller
 
         now_time = datetime.now()
         string_time = now_time.strftime("%H : %M : %S")
@@ -65,9 +66,10 @@ def play_alarm_sound():
 
 
 class TimerFrame(ttb.Frame):
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, controller, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.parent = parent
+        self.controller = controller
 
         self.time_in_seconds = 0
         self.stringify_time = 0
@@ -166,7 +168,7 @@ class TimerFrame(ttb.Frame):
 
             hours_entry_val = int(hours_entry_val)
             minutes_entry_val = int(minutes_entry_val)
-            seconds_entry_val =  int(seconds_entry_val)
+            seconds_entry_val = int(seconds_entry_val)
 
             self.timer_entry_frame.grid_forget()
             self.start_timer_btn.grid_forget()
@@ -203,10 +205,9 @@ class TimerFrame(ttb.Frame):
 
 
 def main():
-    def change_frames(frame):
-        timer_frame.grid_forget()
-        time_frame.grid_forget()
-        frame.grid(row=1, column=1)
+    def show_frame(frame_name):
+        chosen_frame = frames[frame_name]
+        chosen_frame.tkraise()
 
     root = ttb.Window(themename="darkly")
     root.title("Clock")
@@ -217,6 +218,22 @@ def main():
     side_panel = ttb.Frame(root, width=75, height=500, bootstyle="info")
     side_panel.grid(rowspan=4, column=0)
 
+    container = ttb.Frame(root)
+    container.grid(row=2, column=1)
+    container.grid_rowconfigure(0, weight=1)
+    container.grid_columnconfigure(0, weight=1)
+
+    frames = {}
+
+    for Frame in (TimeFrame, TimerFrame):
+        page_name = Frame.__name__
+        frame = Frame(container, root)
+        frames[page_name] = frame
+
+        frame.grid(row=0, column=0, sticky="nsew")
+
+    show_frame("TimeFrame")
+
     clock_image = Image.open(resource_path("clock_icon.png"))
     resized_clock = clock_image.resize((50, 50))
     timer_image = Image.open(resource_path("timer_icon.png"))
@@ -225,17 +242,13 @@ def main():
     used_clock_image = ImageTk.PhotoImage(resized_clock)
     used_timer_image = ImageTk.PhotoImage(resized_timer)
 
-    clock_button = ttb.Button(root, image=used_clock_image, bootstyle=INFO, command=lambda: change_frames(time_frame))
+    clock_button = ttb.Button(root, image=used_clock_image, bootstyle=INFO, command=lambda: show_frame("TimeFrame"))
     clock_button.image = used_clock_image
-    clock_button.grid(row=0, column=0)
+    clock_button.grid(row=1, column=0)
 
-    timer_button = ttb.Button(root, image=used_timer_image, bootstyle=INFO, command=lambda: change_frames(timer_frame))
+    timer_button = ttb.Button(root, image=used_timer_image, bootstyle=INFO, command=lambda: show_frame("TimerFrame"))
     timer_button.image = used_timer_image
-    timer_button.grid(row=1, column=0)
-
-    time_frame = TimeFrame(root)
-    time_frame.grid(row=1, column=1)
-    timer_frame = TimerFrame(root)
+    timer_button.grid(row=2, column=0)
 
     root.mainloop()
 
