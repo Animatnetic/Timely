@@ -60,7 +60,7 @@ def format_time(seconds: int):
 
 
 def play_alarm_sound():
-    playsound(resource_path("alarm_sound.wav"), block=False)
+    playsound("alarm_sound.wav", block=False)
 
 
 class TimerFrame(ttb.Frame):
